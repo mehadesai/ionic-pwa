@@ -1,7 +1,6 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
-import { Facebook } from '@ionic-native/facebook';
 /*
   Generated class for the AuthProvider provider.
 
@@ -11,7 +10,7 @@ import { Facebook } from '@ionic-native/facebook';
 @Injectable()
 export class AuthProvider {
 
-  constructor(public afAuth: AngularFireAuth, private facebook: Facebook,) {
+  constructor(public afAuth: AngularFireAuth) {
   }
 
   loginUser(newEmail:string,newPassword:string): Promise<any> {
@@ -34,5 +33,7 @@ export class AuthProvider {
     // login with facebook code goes here  .....
     return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
   }
+
+
 
 }

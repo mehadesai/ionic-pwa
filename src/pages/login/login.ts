@@ -69,6 +69,10 @@ export class LoginPage {
     this.authData.loginFacebook().then((res)=>console.log(res));
   }
 
+  loginPhone(){
+    this.navCtrl.push("PhoneLoginPage");
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
