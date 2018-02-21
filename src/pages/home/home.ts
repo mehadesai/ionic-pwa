@@ -14,6 +14,9 @@ export class HomePage {
   autocomplete:any;
   autocompleteItems;
   address:string;
+  latitude: number = 0;
+  longitude: number = 0;
+  geo: any
   GoogleAutocomplete = new google.maps.places.AutocompleteService();
   constructor(public navCtrl: NavController,public authData:AuthProvider,private zone: NgZone) {
     
@@ -71,12 +74,24 @@ export class HomePage {
     }
 
 
-    getAddress(place: Object) {       
-      this.address = place['formatted_address'];
-      var location = place['geometry']['location'];
-      var lat =  location.lat();
-      var lng = location.lng();
-      console.log('Address Object', place);
+    selectSearchResult(item){
+      this.autocompleteItems=[];
+      console.log(item);
+      this.geo=item;
+      this.geoCode(this.geo);
+    }
+
+    //convert Address string to lat and long
+    geoCode(item:any) {
+      let geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ 'placeId': item.place_id }, (results, status) => {
+        console.log(results)
+        this.latitude = results[0].geometry.location.lat();
+        this.longitude = results[0].geometry.location.lng();
+        console.log("lat: " + this.latitude + ", long: " + this.longitude);
+        
+      });
   }
+
 
 }
