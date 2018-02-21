@@ -1,6 +1,7 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
+import { Storage } from '@ionic/storage';
 /*
   Generated class for the AuthProvider provider.
 
@@ -9,8 +10,8 @@ import firebase from 'firebase/app';
 */
 @Injectable()
 export class AuthProvider {
-
-  constructor(public afAuth: AngularFireAuth) {
+  HAS_LOGGED_IN = 'hasLoggedIn';
+  constructor(public afAuth: AngularFireAuth, public storage: Storage) {
   }
 
   loginUser(newEmail:string,newPassword:string): Promise<any> {
@@ -18,6 +19,7 @@ export class AuthProvider {
   }
 
   logoutUser(): Promise<void> {
+    this.logoutUpdateStorage();
     return this.afAuth.auth.signOut();
   }
 
@@ -34,6 +36,40 @@ export class AuthProvider {
     return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
   }
 
+  setUserEmail(email) {
+    this.storage.set('useremail', email);
+  }
 
+  getUserEmail(){
+    return this.storage.get('useremail').then((value)=>{
+      return value;
+    });
+  }
+
+  setUserPhone(phone) {
+    this.storage.set('userphone', phone);
+  }
+
+  getUserPhone(){
+    return this.storage.get('userphone').then((value)=>{
+      return value;
+    });
+  }
+
+  loginWithEmail(email) {
+    this.storage.set(this.HAS_LOGGED_IN, true);
+    this.setUserEmail(email);
+  }
+
+  loginWithPhone(email) {
+    this.storage.set(this.HAS_LOGGED_IN, true);
+    this.setUserEmail(email);
+  }
+
+  logoutUpdateStorage() {
+    this.storage.remove(this.HAS_LOGGED_IN);
+    this.storage.remove('useremail');
+    this.storage.remove('userphone');
+  }
 
 }

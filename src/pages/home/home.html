@@ -1,17 +1,18 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Project J Home
     </ion-title>
+    <ion-buttons end>
+      <button ion-button  block type="button" (click)="logOut()">
+        Logout
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-  <button ion-button block type="button" (click)="logOut()">
-      Logout
-    </button>
+  <p *ngIf="useremail">Logged in as: {{useremail}}</p>
+  <p *ngIf="userphone">Logged in with: {{userphone}}</p>
+  
 </ion-content>

@@ -8,7 +8,8 @@ import { LoginPage } from '../login/login';
   templateUrl: 'home.html'
 })
 export class HomePage {
-
+  useremail:string;
+  userphone:number;
   constructor(public navCtrl: NavController,public authData:AuthProvider) {
 
   }
@@ -19,6 +20,25 @@ export class HomePage {
       //this.navCtrl.popAll();
       //this.navCtrl.push("LoginPage");
     });
+  }
+
+  getUserEmail(){
+    this.authData.getUserEmail().then(useremail=>{
+      this.useremail=useremail;
+      console.log("useremail=="+useremail);
+    })
+  }
+
+  getUserPhone(){
+    this.authData.getUserPhone().then(userphone=>{
+      this.userphone=userphone;
+      console.log("userphone=="+userphone);
+    })
+  }
+
+  ngAfterViewInit() {
+    this.getUserEmail();
+    this.getUserPhone();
   }
 
 }

@@ -21,6 +21,7 @@ import { HomePage } from '../home/home';
 export class LoginPage {
   loginForm:FormGroup;
   loading:Loading;
+  email:string;
   constructor(public navCtrl: NavController, public navParams: NavParams,public authData:AuthProvider,public formBuilder:FormBuilder,public alertCtrl:AlertController,public loadingCtrl:LoadingController) {
     this.loginForm=formBuilder.group({
       email:['',Validators.compose([Validators.required,EmailValidator.isValid])],
@@ -29,11 +30,18 @@ export class LoginPage {
   }
 
   loginUser(){
+    let self=this;
     if(!this.loginForm.valid){
       console.log(this.loginForm.value);
     }
     else{
       this.authData.loginUser(this.loginForm.value.email,this.loginForm.value.password).then(authData=>{
+        console.log("email="+self.authData.afAuth.auth.currentUser.email);
+        console.log("displayName="+self.authData.afAuth.auth.currentUser.displayName);
+        console.log("providerId="+self.authData.afAuth.auth.currentUser.providerId);
+        console.log(authData);
+        self.email=self.authData.afAuth.auth.currentUser.email;
+        this.authData.loginWithEmail(self.email);
         this.navCtrl.setRoot(HomePage);
       },error=>{
         this.loading.dismiss().then(()=>{
