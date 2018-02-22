@@ -19,6 +19,7 @@ import { CommonFunctionsProvider } from '../providers/common-functions/common-fu
 import { DataServiceProvider } from '../providers/data-service/data-service';
 import { HttpModule } from '@angular/http';
 import { PlacesListPage } from '../pages/places-list/places-list';
+import { SortPipe } from '../pipes/sort/sort';
 // AF2 Settings
 const firebaseConfig = {
     apiKey: "AIzaSyBd_ADAhTC8IsxHmgiJJgysuh1E-YkqHJw",
@@ -32,7 +33,8 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    PlacesListPage
+    PlacesListPage,
+    SortPipe
   ],
   imports: [
     BrowserModule,

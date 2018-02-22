@@ -20,7 +20,9 @@ export class PlacesListPage {
   // places:any;
   public items: Array<any> = [];
   public itemRef: firebase.database.Reference = firebase.database().ref('places');
-
+  descending: boolean = false;
+  order: number;
+  column: string = 'description';
   constructor(public navCtrl: NavController, public navParams: NavParams,public af:AngularFireDatabase) {
     // this.items$=this.af.list('places');
     // this.places=Array.of(this.items$);
@@ -36,6 +38,11 @@ export class PlacesListPage {
       });
     });
     
+  }
+
+  sort(){
+    this.descending = !this.descending;
+    this.order = this.descending ? 1 : -1;
   }
 
 
