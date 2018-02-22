@@ -16,7 +16,9 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { IonicStorageModule } from '@ionic/storage';
 import { RemoteServicePlacesProvider } from '../providers/remote-service-places/remote-service-places';
 import { CommonFunctionsProvider } from '../providers/common-functions/common-functions';
-
+import { DataServiceProvider } from '../providers/data-service/data-service';
+import { HttpModule } from '@angular/http';
+import { PlacesListPage } from '../pages/places-list/places-list';
 // AF2 Settings
 const firebaseConfig = {
     apiKey: "AIzaSyBd_ADAhTC8IsxHmgiJJgysuh1E-YkqHJw",
@@ -29,7 +31,8 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    PlacesListPage
   ],
   imports: [
     BrowserModule,
@@ -37,12 +40,14 @@ const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     IonicStorageModule.forRoot(),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    PlacesListPage
   ],
   providers: [
     StatusBar,
@@ -51,6 +56,7 @@ const firebaseConfig = {
     AuthProvider,
     RemoteServicePlacesProvider,
     CommonFunctionsProvider,
+    DataServiceProvider,
   ]
 })
 export class AppModule {}
