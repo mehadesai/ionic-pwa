@@ -1,8 +1,10 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoginPage } from '../login/login';
 import {} from '@types/googlemaps';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { CommonFunctionsProvider } from '../../providers/common-functions/common-functions';
 
 @Component({
   selector: 'page-home',
@@ -16,9 +18,11 @@ export class HomePage {
   address:string;
   latitude: number = 0;
   longitude: number = 0;
-  geo: any
+  geo: any;
+  description:any;
+  place_id:number;
   GoogleAutocomplete = new google.maps.places.AutocompleteService();
-  constructor(public navCtrl: NavController,public authData:AuthProvider,private zone: NgZone) {
+  constructor(public navCtrl: NavController,public authData:AuthProvider,private zone: NgZone,public alertCtrl:AlertController,private af: AngularFireDatabase,public commonfunc:CommonFunctionsProvider) {
     
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
@@ -75,10 +79,11 @@ export class HomePage {
 
 
     selectSearchResult(item){
-      this.autocompleteItems=[];
+      // this.autocompleteItems=[];
       console.log(item);
       this.geo=item;
       this.geoCode(this.geo);
+      // this.presentAddPlaceConfirm();
     }
 
     //convert Address string to lat and long
@@ -88,9 +93,43 @@ export class HomePage {
         console.log(results)
         this.latitude = results[0].geometry.location.lat();
         this.longitude = results[0].geometry.location.lng();
-        console.log("lat: " + this.latitude + ", long: " + this.longitude);
-        
+        this.place_id=item.place_id;
+        this.description=results[0].formatted_address;
+        console.log("desc=="+results[0].formatted_address)     
+        this.presentAddPlaceConfirm();
       });
+      return;
+  }
+
+  presentAddPlaceConfirm() {
+    let self=this;
+    let latitude=this.latitude;
+    let longitude=this.longitude;
+    let place_id=this.place_id;
+    let description=this.description;
+    console.log("latitude="+latitude+"=longitude="+longitude+"=place_id="+place_id+"=description="+description)
+    let alert = this.alertCtrl.create({
+      title: 'Confirm add place',
+      message: 'Do you really want to add this place?',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.af.list(`places`).push({ description,place_id,latitude,longitude });
+            this.commonfunc.presentToast("Place added Successfully!!!");
+            // alert.dismiss();
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
 

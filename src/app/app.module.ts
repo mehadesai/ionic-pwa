@@ -12,7 +12,10 @@ import { AuthProvider } from '../providers/auth/auth';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { IonicStorageModule } from '@ionic/storage';
+import { RemoteServicePlacesProvider } from '../providers/remote-service-places/remote-service-places';
+import { CommonFunctionsProvider } from '../providers/common-functions/common-functions';
 
 // AF2 Settings
 const firebaseConfig = {
@@ -33,7 +36,8 @@ const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -45,6 +49,8 @@ const firebaseConfig = {
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
+    RemoteServicePlacesProvider,
+    CommonFunctionsProvider,
   ]
 })
 export class AppModule {}

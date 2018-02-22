@@ -19,8 +19,12 @@
   </ion-toolbar>
   
   <ion-list [hidden]="autocompleteItems.length == 0">
-    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+    <ion-item *ngFor="let item of autocompleteItems" tappable >
       {{ item.description }}
+      <button ion-button clear icon-start float-right (click)="selectSearchResult(item)">
+        <ion-icon name='add-circle' is-active="false"></ion-icon>
+        Add
+      </button>
     </ion-item>
   </ion-list>
 </ion-content>
