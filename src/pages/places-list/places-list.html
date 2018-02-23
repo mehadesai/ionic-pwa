@@ -6,9 +6,40 @@
 -->
 <ion-header>
 
+
   <ion-navbar>
-    <ion-title>Places List</ion-title>
-  </ion-navbar>
+      <ion-grid>
+          <ion-row>
+              <ion-col col-2>
+                  <ion-buttons>
+                      <button ion-button menuToggle>
+                        <ion-icon name="menu"></ion-icon>
+                      </button>
+                      </ion-buttons>
+              </ion-col>
+                <ion-col>
+                    <div>
+                        
+                          <ion-title>
+                              Places List
+                          </ion-title>
+                      </div>   
+                </ion-col>
+             
+                
+                <ion-col>
+                    <ion-buttons end>
+                        <button ion-button ion-only (click)="filterData();">
+                          <ion-icon name="funnel"></ion-icon>
+                        </button>
+                        <button ion-button  block type="button" (click)="logOut()">
+                          Logout
+                        </button>
+                      </ion-buttons>   
+                </ion-col>
+            </ion-row>
+      </ion-grid>  
+    </ion-navbar>
 
 </ion-header>
 
@@ -18,7 +49,20 @@
   <button ion-button type="button" (click)="sort()">Sort</button>
   <ion-list>
     <ion-item *ngFor="let item of items | search : terms | sort: {property: column, order: order}">
-      <p>{{item.description}}</p>
+      <ion-row>
+          <ion-col>
+              {{item.description}}
+          </ion-col>
+        <ion-col>
+            <ion-buttons end>
+                <button ion-button ion-only (click)="navigateToNearbyPlaces(item.place_id);">
+                  <ion-icon name="funnel"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-col>
+      </ion-row>  
+
+      
     </ion-item>
   </ion-list>
 </ion-content>

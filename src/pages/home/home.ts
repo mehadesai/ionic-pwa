@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoginPage } from '../login/login';
 import {} from '@types/googlemaps';
@@ -20,12 +20,23 @@ export class HomePage {
   longitude: number = 0;
   geo: any;
   description:any;
-  place_id:number;
+  place_id:any;
   GoogleAutocomplete = new google.maps.places.AutocompleteService();
-  constructor(public navCtrl: NavController,public authData:AuthProvider,private zone: NgZone,public alertCtrl:AlertController,private af: AngularFireDatabase,public commonfunc:CommonFunctionsProvider) {
+  GooglePlaces=new google.maps.places.PlacesService(document.createElement('div'))
+  nearbyItems:any;
+  place_id_param:any;
+  nearby_places_param:boolean = false;
+  constructor(public navCtrl: NavController,public navParams: NavParams, public authData:AuthProvider,private zone: NgZone,public alertCtrl:AlertController,private af: AngularFireDatabase,public commonfunc:CommonFunctionsProvider) {
     
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
+    this.nearby_places_param = navParams.get("nearbyplaces");
+    this.place_id_param = navParams.get("place_id");
+
+    console.log("nearby_places_param=="+this.nearby_places_param+"=="+this.place_id_param);
+    if(this.nearby_places_param == true){
+      this.searchNearbyPlaces(this.place_id_param);
+    }
   }
 
   logOut(){
@@ -72,6 +83,7 @@ export class HomePage {
         this.zone.run(() => {
           predictions.forEach((prediction) => {
             this.autocompleteItems.push(prediction);
+            console.log(prediction);
           });
         });
       });
@@ -132,5 +144,30 @@ export class HomePage {
     alert.present();
   }
 
-
+  searchNearbyPlaces(place_id){
+    console.log("Nearby placess====")
+    this.autocompleteItems = [];
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'placeId': place_id}, (results, status) => {
+      if(results[0]){
+        this.autocompleteItems = [];
+        this.GooglePlaces.nearbySearch({
+            location: results[0].geometry.location,
+            radius: 500
+          }, (near_places) => {
+            this.zone.run(() => {
+              this.nearbyItems = [];
+              console.log(near_places)
+              for (var i = 0; i < near_places.length; i++) {
+                near_places[i]["description"]=near_places[i].name;
+                this.nearbyItems.push(near_places[i]);
+                this.autocompleteItems.push(near_places[i]);
+                
+              }
+          });
+        });
+      }
+    });
+    console.log(this.nearbyItems);
+  }
 }
