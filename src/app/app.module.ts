@@ -20,6 +20,7 @@ import { DataServiceProvider } from '../providers/data-service/data-service';
 import { HttpModule } from '@angular/http';
 import { PlacesListPage } from '../pages/places-list/places-list';
 import { SortPipe } from '../pipes/sort/sort';
+import { SearchPipe } from '../pipes/search/search';
 // AF2 Settings
 const firebaseConfig = {
     apiKey: "AIzaSyBd_ADAhTC8IsxHmgiJJgysuh1E-YkqHJw",
@@ -34,7 +35,8 @@ const firebaseConfig = {
     MyApp,
     HomePage,
     PlacesListPage,
-    SortPipe
+    SortPipe,
+    SearchPipe
   ],
   imports: [
     BrowserModule,
